@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/model"
 )
 
 func generateSVG(state model.EditorState) string {

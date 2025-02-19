@@ -3,7 +3,7 @@ package input
 import (
 	"context"
 
-	"github.com/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/model"
 )
 
 type UserService interface {

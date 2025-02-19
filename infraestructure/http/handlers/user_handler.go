@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/confericis-backend/model"
-	"github.com/confericis-backend/ports/input"
+	"github.com/luispfcanales/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/ports/input"
 )
 
 type UserHandler struct {

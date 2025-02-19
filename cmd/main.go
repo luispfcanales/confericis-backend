@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/confericis-backend/infraestructure/http/handlers"
-	"github.com/confericis-backend/infraestructure/postgres/repository"
-	"github.com/confericis-backend/service"
 	_ "github.com/lib/pq"
+	"github.com/luispfcanales/confericis-backend/infraestructure/http/handlers"
+	"github.com/luispfcanales/confericis-backend/infraestructure/postgres/repository"
+	"github.com/luispfcanales/confericis-backend/service"
 )
 
 func main() {
@@ -31,7 +31,7 @@ func main() {
 
 	// Rutas
 	http.HandleFunc("POST /users", userHandler.CreateUser)
-	http.HandleFunc("/api/export/svg", handlers.HandleExportSVG)
+	http.HandleFunc("GET /api/export/svg", handlers.HandleExportSVG)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("hola"))
 	})

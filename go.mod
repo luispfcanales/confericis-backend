@@ -1,4 +1,4 @@
-module github.com/confericis-backend
+module github.com/luispfcanales/confericis-backend
 
 go 1.23.2
 

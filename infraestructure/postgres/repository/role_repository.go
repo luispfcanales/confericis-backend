@@ -6,8 +6,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/confericis-backend/model"
-	"github.com/confericis-backend/ports/output"
+	"github.com/luispfcanales/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/ports/output"
 )
 
 type roleRepository struct {

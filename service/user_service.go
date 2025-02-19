@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/confericis-backend/model"
-	"github.com/confericis-backend/ports/input"
-	"github.com/confericis-backend/ports/output"
+	"github.com/luispfcanales/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/ports/input"
+	"github.com/luispfcanales/confericis-backend/ports/output"
 	"golang.org/x/crypto/bcrypt"
 )
 

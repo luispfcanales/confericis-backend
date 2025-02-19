@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/confericis-backend/model"
-	"github.com/confericis-backend/ports/output"
+	"github.com/luispfcanales/confericis-backend/model"
+	"github.com/luispfcanales/confericis-backend/ports/output"
 )
 
 type userRepository struct {
