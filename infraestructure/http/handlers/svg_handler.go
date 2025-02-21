@@ -9,6 +9,22 @@ import (
 	"github.com/luispfcanales/confericis-backend/model"
 )
 
+func escapeXML(s string) string {
+	replacements := map[string]string{
+		"&":  "&amp;",
+		"<":  "&lt;",
+		">":  "&gt;",
+		"'":  "&apos;",
+		"\"": "&quot;",
+	}
+
+	result := s
+	for k, v := range replacements {
+		result = strings.ReplaceAll(result, k, v)
+	}
+	return result
+}
+
 func generateSVG(state model.EditorState) string {
 	var sb strings.Builder
 
@@ -29,6 +45,11 @@ func generateSVG(state model.EditorState) string {
 `, state.Width, state.Height, state.Width, state.Height))
 
 	for _, box := range state.TextBoxes {
+		// Escape text content properly for XML
+		safeText := escapeXML(box.Text)
+		// Replace newlines with <br/> after escaping the text
+		safeTextWithBreaks := strings.ReplaceAll(safeText, "\n", "<br/>")
+
 		sb.WriteString(fmt.Sprintf(`    <g transform="translate(%f, %f)">
         <foreignObject width="%f" height="%f">
             <div xmlns="http://www.w3.org/1999/xhtml" 
@@ -71,7 +92,7 @@ func generateSVG(state model.EditorState) string {
 			box.Style.BackgroundColor,
 			box.Style.Padding,
 			box.Style.Margin,
-			strings.ReplaceAll(box.Text, "\n", "<br/>")))
+			safeTextWithBreaks))
 	}
 
 	sb.WriteString("</svg>")
@@ -79,21 +100,6 @@ func generateSVG(state model.EditorState) string {
 }
 
 func HandleExportSVG(w http.ResponseWriter, r *http.Request) {
-	// Configurar CORS
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method == "OPTIONS" {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != "POST" {
-		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
-		return
-	}
-
 	var state model.EditorState
 	if err := json.NewDecoder(r.Body).Decode(&state); err != nil {
 		http.Error(w, "Error al decodificar JSON", http.StatusBadRequest)
