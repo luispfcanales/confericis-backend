@@ -30,3 +30,21 @@ func (h *RoleHandler) AllRoles(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(roles)
 }
+
+func (h *RoleHandler) RoleByID(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	if id == "" {
+		http.Error(w, "Missing role ID", http.StatusBadRequest)
+		return
+	}
+
+	ctx := r.Context()
+	role, err := h.roleService.GetRoleByID(ctx, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(role)
+}

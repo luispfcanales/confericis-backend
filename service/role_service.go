@@ -30,3 +30,11 @@ func (s *roleCaseUse) GetRoles(ctx context.Context) ([]*model.Roles, error) {
 	}
 	return roles, nil
 }
+
+func (s *roleCaseUse) GetRoleByID(ctx context.Context, id string) (*model.Roles, error) {
+	roles, err := s.roleRepo.GetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return roles, nil
+}

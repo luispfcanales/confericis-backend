@@ -48,17 +48,19 @@ func (r *roleRepository) Create(ctx context.Context, role *model.Roles) error {
 
 func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Roles, error) {
 	query := `
-        SELECT id, name, description, created_at, updated_at
+        SELECT id, name, status, created_at, updated_at, deleted_at
         FROM roles
         WHERE id = $1`
 
 	role := &model.Roles{}
+	var deletedAt sql.NullTime
 	err := r.db.QueryRowContext(ctx, query, id).Scan(
 		&role.ID,
 		&role.Name,
-		&role.Description,
+		&role.Status,
 		&role.CreatedAt,
 		&role.UpdatedAt,
+		&deletedAt,
 	)
 
 	if err == sql.ErrNoRows {
@@ -67,6 +69,10 @@ func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Roles, 
 
 	if err != nil {
 		return nil, err
+	}
+
+	if deletedAt.Valid {
+		role.DeletedAt = deletedAt.Time
 	}
 
 	return role, nil

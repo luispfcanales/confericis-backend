@@ -44,13 +44,11 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /users", userHandler.CreateUser)
 	mux.HandleFunc("GET /api/roles", roleHandler.AllRoles)
+	mux.HandleFunc("GET /api/roles/{id}", roleHandler.RoleByID)
 	mux.HandleFunc("POST /api/export/svg", handlers.HandleExportSVG)
 	mux.HandleFunc("POST /api/export/pdf", handlers.GeneratePDFHandler)
-	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hola"))
-	})
 
-	handler := middleware.CorsMiddleware(mux)
+	handler := middleware.CorsMiddleware(middleware.LoggingMiddleware(mux))
 
 	log.Fatal(http.ListenAndServe(":3000", handler))
 }
