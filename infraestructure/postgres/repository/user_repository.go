@@ -56,7 +56,7 @@ func (r *userRepository) GetByID(ctx context.Context, id string) (*model.User, e
         WHERE u.id = $1`
 
 	var user model.User
-	var role model.Role
+	var role model.Roles
 	err := r.db.QueryRowContext(ctx, query, id).Scan(
 		&user.ID, &user.Email, &user.Password, &user.Name, &user.RoleID,
 		&user.CreatedAt, &user.UpdatedAt,

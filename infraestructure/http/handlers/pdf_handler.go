@@ -29,8 +29,6 @@ func GeneratePDFHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Configurar PDF
 	pdf := gofpdf.New("P", "pt", input.PageSize, "")
-	// pdf := gofpdf.New("P", "pt", "", "")
-	//pdf.SetPageSize(input.Width*0.75, input.Height*0.75)
 
 	setupFonts(pdf) // Configuración de fuentes
 
@@ -227,21 +225,3 @@ func parsePadding(padding string) float64 {
 
 	return size
 }
-
-// func parsePadding(padding string) float64 {
-// 	if padding == "" {
-// 		return 0
-// 	}
-// 	parts := strings.Split(padding, " ")
-// 	if len(parts) > 0 {
-// 		// val := strings.TrimSuffix(parts[0], "px")
-// 		val := strings.TrimSuffix(parts[0], "pt")
-// 		size, err := strconv.ParseFloat(val, 64)
-// 		if err != nil {
-// 			return 0
-// 		}
-// 		// return size * 0.75
-// 		return size
-// 	}
-// 	return 0
-// }

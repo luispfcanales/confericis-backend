@@ -2,10 +2,12 @@ package model
 
 import "time"
 
-type Role struct {
+type Roles struct {
 	ID          string
 	Name        string
+	Status      bool
 	Description string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
+	DeletedAt   time.Time
 }

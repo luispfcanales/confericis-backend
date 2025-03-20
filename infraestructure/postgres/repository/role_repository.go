@@ -20,7 +20,7 @@ func NewRoleRepository(db *sql.DB) output.RoleRepository {
 	}
 }
 
-func (r *roleRepository) Create(ctx context.Context, role *model.Role) error {
+func (r *roleRepository) Create(ctx context.Context, role *model.Roles) error {
 	query := `
         INSERT INTO roles (name, description, created_at, updated_at)
         VALUES ($1, $2, $3, $4)
@@ -46,13 +46,13 @@ func (r *roleRepository) Create(ctx context.Context, role *model.Role) error {
 	return nil
 }
 
-func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Role, error) {
+func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Roles, error) {
 	query := `
         SELECT id, name, description, created_at, updated_at
         FROM roles
         WHERE id = $1`
 
-	role := &model.Role{}
+	role := &model.Roles{}
 	err := r.db.QueryRowContext(ctx, query, id).Scan(
 		&role.ID,
 		&role.Name,
@@ -72,9 +72,9 @@ func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Role, e
 	return role, nil
 }
 
-func (r *roleRepository) List(ctx context.Context) ([]*model.Role, error) {
+func (r *roleRepository) List(ctx context.Context) ([]*model.Roles, error) {
 	query := `
-        SELECT id, name, description, created_at, updated_at
+        SELECT id, name,status, created_at, updated_at, deleted_at
         FROM roles
         ORDER BY name`
 
@@ -84,18 +84,24 @@ func (r *roleRepository) List(ctx context.Context) ([]*model.Role, error) {
 	}
 	defer rows.Close()
 
-	var roles []*model.Role
+	var roles []*model.Roles
 	for rows.Next() {
-		role := &model.Role{}
+		role := &model.Roles{}
+		var deletedAt sql.NullTime
 		err := rows.Scan(
 			&role.ID,
 			&role.Name,
-			&role.Description,
+			&role.Status,
+			// &role.Description,
 			&role.CreatedAt,
 			&role.UpdatedAt,
+			&deletedAt,
 		)
 		if err != nil {
 			return nil, err
+		}
+		if deletedAt.Valid {
+			role.DeletedAt = deletedAt.Time
 		}
 		roles = append(roles, role)
 	}
@@ -107,7 +113,7 @@ func (r *roleRepository) List(ctx context.Context) ([]*model.Role, error) {
 	return roles, nil
 }
 
-func (r *roleRepository) Update(ctx context.Context, role *model.Role) error {
+func (r *roleRepository) Update(ctx context.Context, role *model.Roles) error {
 	query := `
         UPDATE roles 
         SET name = $1, 
