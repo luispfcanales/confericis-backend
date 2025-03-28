@@ -80,7 +80,7 @@ func (r *roleRepository) GetByID(ctx context.Context, id string) (*model.Roles, 
 
 func (r *roleRepository) List(ctx context.Context) ([]*model.Roles, error) {
 	query := `
-        SELECT id, name,status, created_at, updated_at, deleted_at
+        SELECT id, name, description, status, created_at, updated_at, deleted_at
         FROM roles
         ORDER BY name`
 
@@ -97,8 +97,8 @@ func (r *roleRepository) List(ctx context.Context) ([]*model.Roles, error) {
 		err := rows.Scan(
 			&role.ID,
 			&role.Name,
+			&role.Description,
 			&role.Status,
-			// &role.Description,
 			&role.CreatedAt,
 			&role.UpdatedAt,
 			&deletedAt,
